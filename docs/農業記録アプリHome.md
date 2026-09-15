@@ -4,14 +4,14 @@
 
 ### 目次
 
-- システム概要 (システム概要)
-- [データ設計 (データ設計)](https://github.com/mitsurufarm/mitsurufarm.github.io/wiki/%E5%9C%83%E5%A0%B4%E8%A8%98%E9%8C%B2%E3%82%A2%E3%83%97%E3%83%AA-%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E6%A7%8B%E6%88%90%E8%A8%AD%E8%A8%88%E6%9B%B8)
-- テーブル構成設計 (テーブル構成設計)
-- DynamoDB詳細設計 (DynamoDB詳細設計)
-- API設計 (API設計)
-- 画面設計 (画面設計)
-- AWS構成 (AWS構成)
-- 開発履歴 (開発履歴)
+- システム概要
+- [データ設計](https://github.com/mitsurufarm/mitsurufarm.github.io/blob/main/docs/%E3%83%87%E3%83%BC%E3%82%BF%E8%A8%AD%E8%A8%88.md)
+- テーブル構成設計
+- DynamoDB詳細設計
+- API設計
+- 画面設計
+- AWS構成
+- 開発履歴
 
 ### システム構成
 
@@ -44,11 +44,4 @@ DynamoDB
 - 低コストな構成を目指す
 - 栽培履歴を年単位で管理する
 - 将来の機能追加を考慮しつつ、初期実装はシンプルにする
-- 設計変更はWikiに反映する
-- Wikiを最新の設計・仕様として扱う
-
-### 開発順序
-
-1. 設計
-2. 実装
-   3
+- 設計変更はdocs以下のファイルに反映する
