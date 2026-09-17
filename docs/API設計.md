@@ -23,26 +23,26 @@ Lambda
 
 ## 2. 基本方針
 
-| 項目               | 方針                                    |
-|--------------------|-----------------------------------------|
-| API方式            | API Gateway HTTP API                    |
-| APIバージョン      | `/api/v1`                               |
-| 認証               | Amazon Cognito JWT                      |
-| HTTPメソッド       | GET / POST / PUT / DELETE               |
-| ID採番             | Lambda + DynamoDB Atomic Counter        |
-| 更新               | PUTによるリソース全体更新               |
-| 削除               | DELETE。SPA側で確認してから実行         |
-| ページング         | `nextToken`                             |
-| デフォルト取得件数 | 50                                      |
-| 最大取得件数       | 100                                     |
-| バリデーション     | SPAで簡易チェック、Lambdaで最終チェック |
-| エラー形式         | 統一JSON形式                            |
-| 写真アップロード   | `multipart/form-data`、最大3MB          |
-| 写真保存先         | Dropbox                                 |
-| 写真表示           | LambdaがDropbox一時URLを生成            |
-| CORS               | GitHub Pagesの公開元のみ許可            |
-| Lambda構成         | 機能単位で分離                          |
-| オフライン         | 対応しない                              |
+  項目                 方針
+  -------------------- -----------------------------------------
+  API方式              API Gateway HTTP API
+  APIバージョン        `/api/v1`
+  認証                 Amazon Cognito JWT
+  HTTPメソッド         GET / POST / PUT / DELETE
+  ID採番               Lambda + DynamoDB Atomic Counter
+  更新                 PUTによるリソース全体更新
+  削除                 DELETE。SPA側で確認してから実行
+  ページング           `nextToken`
+  デフォルト取得件数   50
+  最大取得件数         100
+  バリデーション       SPAで簡易チェック、Lambdaで最終チェック
+  エラー形式           統一JSON形式
+  写真アップロード     `multipart/form-data`、最大3MB
+  写真保存先           Dropbox
+  写真表示             LambdaがDropbox一時URLを生成
+  CORS                 GitHub Pagesの公開元のみ許可
+  Lambda構成           機能単位で分離
+  オフライン           対応しない
 
 ## 3. 認証・認可
 
@@ -56,8 +56,8 @@ Gatewayのルート単位で認証要件を変更する。
 
 ### 3.1 認証エラー
 
-- `401 Unauthorized`: 認証失敗
-- `403 Forbidden`: 認証後の権限不足
+-   `401 Unauthorized`: 認証失敗
+-   `403 Forbidden`: 認証後の権限不足
 
 ## 4. URL規約
 
@@ -74,6 +74,17 @@ GET /api/v1/fields
 GET /api/v1/fields/F0001
 PUT /api/v1/fields/F0001
 DELETE /api/v1/fields/F0001
+GET /api/v1/fields/F0001/areas/A0001
+PUT /api/v1/fields/F0001/areas/A0001
+DELETE /api/v1/fields/F0001/areas/A0001
+GET /api/v1/cultivations/C0001/work-logs/W0001
+PUT /api/v1/cultivations/C0001/work-logs/W0001
+DELETE /api/v1/cultivations/C0001/work-logs/W0001
+GET /api/v1/cultivations/C0001/harvests/H0001
+PUT /api/v1/cultivations/C0001/harvests/H0001
+DELETE /api/v1/cultivations/C0001/harvests/H0001
+GET /api/v1/cultivations/C0001/photos/PH0001
+DELETE /api/v1/cultivations/C0001/photos/PH0001
 ```
 
 ## 5. 共通リクエスト規約
@@ -89,9 +100,9 @@ limit
 nextToken
 ```
 
-- `limit` 未指定: 50
-- `limit` 最大: 100
-- 100を超える値: `400 Bad Request`
+-   `limit` 未指定: 50
+-   `limit` 最大: 100
+-   100を超える値: `400 Bad Request`
 
 `nextToken`はDynamoDBの`LastEvaluatedKey`をLambda側でAPI用にエンコードした値とする。
 
@@ -141,28 +152,28 @@ PUT成功時は更新後のリソース全体を返す。
 }
 ```
 
-| HTTP | code               | 用途                        |
-|-----:|--------------------|-----------------------------|
-|  400 | `VALIDATION_ERROR` | 入力値不正                  |
-|  400 | `INVALID_REQUEST`  | リクエスト形式不正          |
-|  401 | `UNAUTHORIZED`     | 認証失敗                    |
-|  403 | `FORBIDDEN`        | 権限不足                    |
-|  404 | `NOT_FOUND`        | 対象データなし              |
-|  409 | `CONFLICT`         | 状態・整合性の競合          |
-|  500 | `INTERNAL_ERROR`   | 内部エラー                  |
-|  502 | `DEPENDENCY_ERROR` | Dropbox等外部サービスエラー |
+    HTTP code                 用途
+  ------ -------------------- -----------------------------
+     400 `VALIDATION_ERROR`   入力値不正
+     400 `INVALID_REQUEST`    リクエスト形式不正
+     401 `UNAUTHORIZED`       認証失敗
+     403 `FORBIDDEN`          権限不足
+     404 `NOT_FOUND`          対象データなし
+     409 `CONFLICT`           状態・整合性の競合
+     500 `INTERNAL_ERROR`     内部エラー
+     502 `DEPENDENCY_ERROR`   Dropbox等外部サービスエラー
 
 内部エラーの詳細情報や認証情報などはクライアントへ返さない。
 
 ## 8. FIELD API
 
-| Method | Path                       | 内容      |
-|--------|----------------------------|-----------|
-| GET    | `/api/v1/fields`           | FIELD一覧 |
-| POST   | `/api/v1/fields`           | FIELD作成 |
-| GET    | `/api/v1/fields/{fieldId}` | FIELD取得 |
-| PUT    | `/api/v1/fields/{fieldId}` | FIELD更新 |
-| DELETE | `/api/v1/fields/{fieldId}` | FIELD削除 |
+  Method   Path                         内容
+  -------- ---------------------------- -----------
+  GET      `/api/v1/fields`             FIELD一覧
+  POST     `/api/v1/fields`             FIELD作成
+  GET      `/api/v1/fields/{fieldId}`   FIELD取得
+  PUT      `/api/v1/fields/{fieldId}`   FIELD更新
+  DELETE   `/api/v1/fields/{fieldId}`   FIELD削除
 
 FIELD一覧はGSI4を使用する。
 
@@ -170,13 +181,19 @@ FIELD削除では、配下のAREA、CULTIVATION、WORK_LOG、HARVEST、PHOTOを�
 
 ## 9. AREA API
 
-| Method | Path                             | 内容     |
-|--------|----------------------------------|----------|
-| GET    | `/api/v1/fields/{fieldId}/areas` | AREA一覧 |
-| POST   | `/api/v1/fields/{fieldId}/areas` | AREA作成 |
-| GET    | `/api/v1/areas/{areaId}`         | AREA取得 |
-| PUT    | `/api/v1/areas/{areaId}`         | AREA更新 |
-| DELETE | `/api/v1/areas/{areaId}`         | AREA削除 |
+  -----------------------------------------------------------------------
+  Method     Path                                           内容
+  ---------- ---------------------------------------------- -------------
+  GET        `/api/v1/fields/{fieldId}/areas`               AREA一覧
+
+  POST       `/api/v1/fields/{fieldId}/areas`               AREA作成
+
+  GET        `/api/v1/fields/{fieldId}/areas/{areaId}`      AREA取得
+
+  PUT        `/api/v1/fields/{fieldId}/areas/{areaId}`      AREA更新
+
+  DELETE     `/api/v1/fields/{fieldId}/areas/{areaId}`      AREA削除
+  -----------------------------------------------------------------------
 
 AREA一覧はBase Tableの `PK=fieldId`、`SK begins_with AREA#` を使用する。
 
@@ -184,13 +201,13 @@ AREA削除では、配下のCULTIVATION、WORK_LOG、HARVEST、PHOTOを削除す
 
 ## 10. CROP API
 
-| Method | Path                     | 内容       |
-|--------|--------------------------|------------|
-| GET    | `/api/v1/crops`          | CROP一覧   |
-| POST   | `/api/v1/crops`          | CROP作成   |
-| GET    | `/api/v1/crops/{cropId}` | CROP取得   |
-| PUT    | `/api/v1/crops/{cropId}` | CROP更新   |
-| DELETE | `/api/v1/crops/{cropId}` | CROP無効化 |
+  Method   Path                       内容
+  -------- -------------------------- ------------
+  GET      `/api/v1/crops`            CROP一覧
+  POST     `/api/v1/crops`            CROP作成
+  GET      `/api/v1/crops/{cropId}`   CROP取得
+  PUT      `/api/v1/crops/{cropId}`   CROP更新
+  DELETE   `/api/v1/crops/{cropId}`   CROP無効化
 
 CROPは栽培履歴から参照されるマスターデータのため物理削除しない。
 
@@ -198,65 +215,91 @@ DELETEは `active=false` に変更する。
 
 ## 11. CULTIVATION API
 
-| Method | Path                                   | 内容            |
-|--------|----------------------------------------|-----------------|
-| GET    | `/api/v1/cultivations`                 | CULTIVATION一覧 |
-| GET    | `/api/v1/cultivations/current`         | 現在栽培中一覧  |
-| POST   | `/api/v1/cultivations`                 | CULTIVATION作成 |
-| GET    | `/api/v1/cultivations/{cultivationId}` | CULTIVATION取得 |
-| PUT    | `/api/v1/cultivations/{cultivationId}` | CULTIVATION更新 |
-| DELETE | `/api/v1/cultivations/{cultivationId}` | CULTIVATION削除 |
-| GET    | `/api/v1/areas/{areaId}/cultivations`  | AREA栽培履歴    |
-| GET    | `/api/v1/crops/{cropId}/cultivations`  | CROP栽培履歴    |
+  ------------------------------------------------------------------------------------
+  Method   Path                                                     内容
+  -------- -------------------------------------------------------- ------------------
+  GET      `/api/v1/cultivations`                                   CULTIVATION一覧
+
+  GET      `/api/v1/cultivations/current`                           現在栽培中一覧
+
+  POST     `/api/v1/cultivations`                                   CULTIVATION作成
+
+  GET      `/api/v1/cultivations/{cultivationId}`                   CULTIVATION取得
+
+  PUT      `/api/v1/cultivations/{cultivationId}`                   CULTIVATION更新
+
+  DELETE   `/api/v1/cultivations/{cultivationId}`                   CULTIVATION削除
+
+  GET      `/api/v1/fields/{fieldId}/areas/{areaId}/cultivations`   AREA栽培履歴
+
+  GET      `/api/v1/crops/{cropId}/cultivations`                    CROP栽培履歴
+  ------------------------------------------------------------------------------------
 
 `/cultivations/current`
 はGSI3、CROPからの検索はGSI2、CULTIVATION詳細はGSI1を使用する。
 
 作成・更新時には以下をLambdaで検証する。
 
-- FIELDが存在する
-- AREAが存在する
-- AREAが指定されたFIELDに属する
-- CROPが存在する
-- CROPが利用可能である
-- yearが妥当
-- 日付形式が正しい
-- statusが許可値である
+-   FIELDが存在する
+-   AREAが存在する
+-   AREAが指定されたFIELDに属する
+-   CROPが存在する
+-   CROPが利用可能である
+-   yearが妥当
+-   日付形式が正しい
+-   statusが許可値である
 
 CULTIVATION削除では、配下のWORK_LOG、HARVEST、PHOTOを削除する。
 
 ## 12. WORK_LOG API
 
-| Method | Path                                             | 内容         |
-|--------|--------------------------------------------------|--------------|
-| GET    | `/api/v1/cultivations/{cultivationId}/work-logs` | WORK_LOG一覧 |
-| POST   | `/api/v1/cultivations/{cultivationId}/work-logs` | WORK_LOG作成 |
-| GET    | `/api/v1/work-logs/{workLogId}`                  | WORK_LOG取得 |
-| PUT    | `/api/v1/work-logs/{workLogId}`                  | WORK_LOG更新 |
-| DELETE | `/api/v1/work-logs/{workLogId}`                  | WORK_LOG削除 |
+  --------------------------------------------------------------------------------------
+  Method   Path                                                           内容
+  -------- -------------------------------------------------------------- --------------
+  GET      `/api/v1/cultivations/{cultivationId}/work-logs`               WORK_LOG一覧
+
+  POST     `/api/v1/cultivations/{cultivationId}/work-logs`               WORK_LOG作成
+
+  GET      `/api/v1/cultivations/{cultivationId}/work-logs/{workLogId}`   WORK_LOG取得
+
+  PUT      `/api/v1/cultivations/{cultivationId}/work-logs/{workLogId}`   WORK_LOG更新
+
+  DELETE   `/api/v1/cultivations/{cultivationId}/work-logs/{workLogId}`   WORK_LOG削除
+  --------------------------------------------------------------------------------------
 
 一覧はGSI1を使用する。
 
 ## 13. HARVEST API
 
-| Method | Path                                            | 内容        |
-|--------|-------------------------------------------------|-------------|
-| GET    | `/api/v1/cultivations/{cultivationId}/harvests` | HARVEST一覧 |
-| POST   | `/api/v1/cultivations/{cultivationId}/harvests` | HARVEST作成 |
-| GET    | `/api/v1/harvests/{harvestId}`                  | HARVEST取得 |
-| PUT    | `/api/v1/harvests/{harvestId}`                  | HARVEST更新 |
-| DELETE | `/api/v1/harvests/{harvestId}`                  | HARVEST削除 |
+  ------------------------------------------------------------------------------------
+  Method   Path                                                          内容
+  -------- ------------------------------------------------------------- -------------
+  GET      `/api/v1/cultivations/{cultivationId}/harvests`               HARVEST一覧
+
+  POST     `/api/v1/cultivations/{cultivationId}/harvests`               HARVEST作成
+
+  GET      `/api/v1/cultivations/{cultivationId}/harvests/{harvestId}`   HARVEST取得
+
+  PUT      `/api/v1/cultivations/{cultivationId}/harvests/{harvestId}`   HARVEST更新
+
+  DELETE   `/api/v1/cultivations/{cultivationId}/harvests/{harvestId}`   HARVEST削除
+  ------------------------------------------------------------------------------------
 
 一覧はGSI1を使用する。
 
 ## 14. PHOTO API
 
-| Method | Path                                          | 内容                   |
-|--------|-----------------------------------------------|------------------------|
-| GET    | `/api/v1/cultivations/{cultivationId}/photos` | PHOTO一覧              |
-| POST   | `/api/v1/cultivations/{cultivationId}/photos` | PHOTOアップロード      |
-| GET    | `/api/v1/photos/{photoId}`                    | PHOTO取得・一時URL取得 |
-| DELETE | `/api/v1/photos/{photoId}`                    | PHOTO削除              |
+  -------------------------------------------------------------------------------------------
+  Method   Path                                                      内容
+  -------- --------------------------------------------------------- ------------------------
+  GET      `/api/v1/cultivations/{cultivationId}/photos`             PHOTO一覧
+
+  POST     `/api/v1/cultivations/{cultivationId}/photos`             PHOTOアップロード
+
+  GET      `/api/v1/cultivations/{cultivationId}/photos/{photoId}`   PHOTO取得・一時URL取得
+
+  DELETE   `/api/v1/cultivations/{cultivationId}/photos/{photoId}`   PHOTO削除
+  -------------------------------------------------------------------------------------------
 
 ### 14.1 アップロード
 
@@ -317,8 +360,8 @@ PUTでは対象リソースの項目を基本的に全て送信する。
 
 `fieldId`、`createdAt`、`updatedAt`などのシステム管理項目はクライアントから変更できない。
 
-- `createdAt`: 作成時の値を維持
-- `updatedAt`: Lambdaが現在時刻に更新
+-   `createdAt`: 作成時の値を維持
+-   `updatedAt`: Lambdaが現在時刻に更新
 
 初期版では同時編集・楽観的ロックは実装しない。
 
@@ -326,15 +369,15 @@ PUTでは対象リソースの項目を基本的に全て送信する。
 
 IDはLambdaからDynamoDB Atomic Counterを使用して採番する。
 
-| データ      | Prefix | 例     |
-|-------------|--------|--------|
-| FIELD       | F      | F0001  |
-| AREA        | A      | A0001  |
-| CROP        | P      | P0001  |
-| CULTIVATION | C      | C0001  |
-| WORK_LOG    | W      | W0001  |
-| HARVEST     | H      | H0001  |
-| PHOTO       | PH     | PH0001 |
+  データ        Prefix   例
+  ------------- -------- --------
+  FIELD         F        F0001
+  AREA          A        A0001
+  CROP          P        P0001
+  CULTIVATION   C        C0001
+  WORK_LOG      W        W0001
+  HARVEST       H        H0001
+  PHOTO         PH       PH0001
 
 欠番は許容する。初期版では4桁を超える採番をエラーとする。
 
@@ -346,16 +389,16 @@ Lambdaではクライアント入力を信用せず、最終バリデーショ�
 
 対象:
 
-- 必須項目
-- 型
-- 許可値
-- ID形式
-- 日付
-- 数値範囲
-- 親子関係
-- CROPの存在・状態
-- 写真サイズ・形式
-- システム管理項目の改変
+-   必須項目
+-   型
+-   許可値
+-   ID形式
+-   日付
+-   数値範囲
+-   親子関係
+-   CROPの存在・状態
+-   写真サイズ・形式
+-   システム管理項目の改変
 
 ## 18. 親子関係の整合性
 
@@ -370,8 +413,25 @@ FIELD
          └─ PHOTO
 ```
 
-例えば、AREAが指定されたFIELDに属していない場合など、不正な親子関係は
-`409 Conflict` または `400 Validation Error` として拒否する。
+A方式では、この親子関係をAPI URLにも反映する。
+
+``` text
+FIELD
+ └─ /fields/{fieldId}
+     └─ /areas/{areaId}
+         └─ /cultivations/{cultivationId}
+             ├─ /work-logs/{workLogId}
+             ├─ /harvests/{harvestId}
+             └─ /photos/{photoId}
+```
+
+LambdaではURLに指定された親IDと対象リソースの実際の親子関係を検証する。
+例えば、`areaId` が指定された `fieldId` に属していない場合や、
+`workLogId`、`harvestId`、`photoId` が指定された `cultivationId`
+に属していない場合は拒否する。
+
+このAPI
+URL変更はURL階層の変更であり、DynamoDBのPK/SK/GSIを変更するものではない。
 
 ## 19. 作成日時・更新日時
 
@@ -423,17 +483,17 @@ Consistent Readを検討する。
 
 主要アクセス:
 
-| API              | 操作             |
-|------------------|------------------|
-| FIELD一覧        | Query GSI4       |
-| AREA一覧         | Query Base Table |
-| CULTIVATION詳細  | Query GSI1       |
-| CROP一覧         | Query GSI4       |
-| CROP→CULTIVATION | Query GSI2       |
-| 現在栽培中       | Query GSI3       |
-| WORK_LOG一覧     | Query GSI1       |
-| HARVEST一覧      | Query GSI1       |
-| PHOTO一覧        | Query GSI1       |
+  API                操作
+  ------------------ ------------------
+  FIELD一覧          Query GSI4
+  AREA一覧           Query Base Table
+  CULTIVATION詳細    Query GSI1
+  CROP一覧           Query GSI4
+  CROP→CULTIVATION   Query GSI2
+  現在栽培中         Query GSI3
+  WORK_LOG一覧       Query GSI1
+  HARVEST一覧        Query GSI1
+  PHOTO一覧          Query GSI1
 
 ## 23. 削除処理
 
@@ -446,22 +506,22 @@ PHOTOについてはDropbox削除を先に行い、成功後にDynamoDBを削除
 
 以下は初期版の必須仕様には含めない。
 
-- 高度なレート制限
-- 高度なCloudWatch監視・アラート
-- 高度なAPI認可
-- Dropbox孤児ファイルの自動クリーンアップ
-- 高度なバックアップ機能
-- オフライン同期
-- 同時編集制御
-- 高度なキャッシュ・パフォーマンス最適化
+-   高度なレート制限
+-   高度なCloudWatch監視・アラート
+-   高度なAPI認可
+-   Dropbox孤児ファイルの自動クリーンアップ
+-   高度なバックアップ機能
+-   オフライン同期
+-   同時編集制御
+-   高度なキャッシュ・パフォーマンス最適化
 
 これらは必要になった時点で追加設計する。未決定事項によって初期版の実装が停止しないことを基本とする。
 
 ## 25. 関連設計書
 
-- `docs/システム概要.md`
-- `docs/データ設計.md`
-- `docs/テーブル構成設計.md`
-- `docs/DynamoDB詳細設計.md`
+-   `docs/システム概要.md`
+-   `docs/データ設計.md`
+-   `docs/テーブル構成設計.md`
+-   `docs/DynamoDB詳細設計.md`
 
 次工程では、本API設計を前提として「画面設計」を定義する。
