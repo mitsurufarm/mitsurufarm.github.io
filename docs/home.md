@@ -38,6 +38,7 @@ DynamoDB   Dropbox
 | [DynamoDB詳細設計](./DynamoDB詳細設計.md) | DynamoDBの物理設計・属性・CRUD・削除・採番 |
 | [API設計](./API設計.md) | APIエンドポイント・リクエスト・レスポンス |
 | [画面設計](./画面設計.md) | SPAの画面構成・画面遷移 |
+| [SPA設計](./SPA設計.md) | SPAの技術構成・ルーティング・コンポーネント・API連携・認証 |
 | [AWS構成](./AWS構成.md) | AWSサービス構成・接続方法 |
 | [開発履歴](./開発履歴.md) | 設計・開発の変更履歴 |
 
