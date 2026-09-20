@@ -292,6 +292,7 @@ DELETE /api/v1/fields/{fieldId}/areas/{areaId}
 
 GET    /api/v1/cultivations/{cultivationId}
 PUT    /api/v1/cultivations/{cultivationId}
+DELETE /api/v1/cultivations/{cultivationId}
 
 GET    /api/v1/cultivations/{cultivationId}/work-logs
 POST   /api/v1/cultivations/{cultivationId}/work-logs
@@ -581,7 +582,22 @@ Lambda実行権限とデプロイ権限を分離する。
 
 SPAでも簡易チェックを行うが、最終的な検証はLambdaで行う。
 
-### 17.2 エラー形式
+### 17.2 CULTIVATION削除
+
+`DELETE /api/v1/cultivations/{cultivationId}` では、
+対象CULTIVATIONに紐付く以下の子リソースを削除する。
+
+- WORK_LOG
+- HARVEST
+- PHOTO
+
+PHOTOについてはDynamoDBのPHOTOレコードに加えて、
+対応するDropboxファイルも削除する。
+
+DynamoDBの削除はBatchWriteItemを使用し、
+25件を超える場合は分割して処理する。
+
+### 17.3 エラー形式
 
 ```json
 {
@@ -592,7 +608,7 @@ SPAでも簡易チェックを行うが、最終的な検証はLambdaで行う�
 }
 ```
 
-### 17.3 ステータスコード
+### 17.4 ステータスコード
 
 ```text
 200 OK
@@ -606,13 +622,13 @@ SPAでも簡易チェックを行うが、最終的な検証はLambdaで行う�
 502 Bad Gateway
 ```
 
-### 17.4 日時
+### 17.5 日時
 
 `createdAt` と `updatedAt` はLambda側で設定する。
 
 UTCのISO 8601形式を基本とする。
 
-### 17.5 ページング
+### 17.6 ページング
 
 DynamoDBの `LastEvaluatedKey` をAPI用 `nextToken` に変換する。
 
@@ -756,14 +772,15 @@ PHOTOはDropboxファイルも削除する。
 2. API認証確認
 3. FIELD CRUD確認
 4. AREA CRUD確認
-5. CULTIVATION確認
-6. WORK_LOG確認
-7. HARVEST確認
-8. PHOTOアップロード確認
-9. PHOTO表示確認
-10. PHOTO削除確認
-11. Dropbox確認
-12. CloudWatch Logs確認
+5. CULTIVATION CRUD確認
+6. CULTIVATION削除時の配下データ削除確認
+7. WORK_LOG CRUD確認
+8. HARVEST CRUD確認
+9. PHOTOアップロード確認
+10. PHOTO表示確認
+11. PHOTO削除確認
+12. Dropbox確認
+13. CloudWatch Logs確認
 
 ---
 
